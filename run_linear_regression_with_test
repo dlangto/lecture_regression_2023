@@ -2,13 +2,15 @@ import pandas
 from sklearn import linear_model
 from sklearn.model_selection import KFold
 from sklearn import metrics
-#program to get accuracy score
 
 dataset = pandas.read_csv("dataset.csv")
 
+dataset.sample(frac=1)
+#randomly get a sample of the dataset, frcation is how much of the dataset you want
+
 print(dataset)
 
-target = dataset.iloc[:,1].values
+target = dataset.iloc[:,0].values
 # sets y values from first three columns
 data = dataset.iloc[:,3:9].values
 # sets x values from columns 3-8
@@ -31,16 +33,12 @@ for train_index, test_index in kfold_object.split(data):
 	target_train = target[train_index]
 	data_test = data[test_index]
 	target_test = target[test_index]
-	machine = linear_model.LogisticRegression()
+	machine = linear_model.LinearRegression()
 	machine.fit(data_train, target_train)
 
 	prediction = machine.predict(data_test)
 
-	accuracy_score = metrics.accuracy_score(target_test, prediction)
-	print("accuracy_score: ", accuracy_score)
-
-	confusion_matrix = metrics.confusion_matrix(target_test, prediction)
-	print("confusion_matrix: ")
-	print(confusion_matrix)
+	r2 = metrics.r2_score(target_test, prediction)
+	print("R square score: ", r2)
 	#continuous= R^2, dummy Y= accuracy score
 	print("\n\n")
